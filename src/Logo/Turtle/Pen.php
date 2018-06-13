@@ -30,4 +30,9 @@ class Pen
     {
         return new self($color, $isDown);
     }
+
+    public function color() : string
+    {
+        return $this->color;
+    }
 }

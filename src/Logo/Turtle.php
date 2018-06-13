@@ -23,7 +23,7 @@ class Turtle
         $this->orientation = new Orientation($x, $y, 0);
     }
 
-    public function walk(int $steps)
+    public function walk(int $steps) : void
     {
         $x = $this->orientation()->x() + $steps * cos($this->orientation()->angle());
         $y = $this->orientation()->y() + $steps * sin($this->orientation()->angle());
@@ -35,12 +35,12 @@ class Turtle
         );
     }
 
-    public function turn(int $angle)
+    public function turn(int $angle) : void
     {
         $this->orientation = Orientation::create(
             $this->orientation->x(),
             $this->orientation->y(),
-            $angle
+            $this->orientation->angle() + $angle
         );
     }
 
@@ -52,5 +52,15 @@ class Turtle
     public function pen() : Pen
     {
         return $this->pen;
+    }
+
+    public function penUp() : void
+    {
+        $this->pen = Pen::create($this->pen()->color(), false);
+    }
+
+    public function penDown() : void
+    {
+        $this->pen = Pen::create($this->pen()->color(), true);
     }
 }

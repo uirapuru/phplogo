@@ -23,6 +23,9 @@ class Test extends TestCase
 
         $turtle = $game->getTurtle();
 
-        die(var_dump($turtle->orientation()));
+        $this->assertEquals(143, $turtle->orientation()->x());
+        $this->assertEquals(144, $turtle->orientation()->y());
+        $this->assertEquals(65, $turtle->orientation()->angle());
+        $this->assertTrue($turtle->pen()->isDown());
     }
 }

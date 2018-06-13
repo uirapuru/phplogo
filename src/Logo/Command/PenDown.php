@@ -1,10 +1,15 @@
 <?php
 
-
 namespace Logo\Command;
 
+use Logo\Board;
+use Logo\CommandInterface;
+use Logo\Turtle;
 
-class PenDown
+class PenDown implements CommandInterface
 {
-
+    public function run(Turtle $turtle, Board $board)
+    {
+        $turtle->penDown();
+    }
 }

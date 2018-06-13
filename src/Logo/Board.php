@@ -24,4 +24,9 @@ class Board
     {
 
     }
+
+    public function clear() : void
+    {
+
+    }
 }

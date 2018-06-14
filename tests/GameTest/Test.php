@@ -30,5 +30,4 @@ class Test extends TestCase
         $this->assertTrue($turtle->pen()->isDown());
         $this->assertEquals(30, $turtle->distance());
     }
-
 }

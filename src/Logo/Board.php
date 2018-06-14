@@ -2,6 +2,8 @@
 
 namespace Logo;
 
+use Logo\Board\Imagine;
+
 class Board
 {
     /** @var  int */
@@ -13,16 +15,20 @@ class Board
     /** @var string */
     protected $color;
 
-    public function __construct($width, $height, $color)
+    /** @var Imagine */
+    protected $adapter;
+
+    public function __construct(int $width, int $height, string $color)
     {
         $this->width = $width;
         $this->height = $height;
         $this->color = $color;
+        $this->adapter = new Imagine($width, $height, $color);
     }
 
     public function drawLine(int $fromX, int $fromY, int $toX, int $toY)
     {
-
+        $this->adapter->drawLine($fromX, $fromY, $toX, $toY);
     }
 
     public function clear() : void

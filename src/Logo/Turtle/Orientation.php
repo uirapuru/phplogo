@@ -17,7 +17,7 @@ class Orientation
     {
         $this->x = $x;
         $this->y = $y;
-        $this->angle = $angle;
+        $this->angle = $angle % 360;
     }
 
     public function x(): int
@@ -38,5 +38,15 @@ class Orientation
     public static function create(int $x, int $y, int $angle) : self
     {
         return new self($x, $y, $angle);
+    }
+
+    public function __toString() : string
+    {
+        return "[" . $this->x . ", " . $this->y . "] @" . $this->angle;
+    }
+
+    public function radians() : float
+    {
+        return deg2rad($this->angle);
     }
 }

@@ -16,6 +16,9 @@ class Turtle
     /** @var  Pen */
     protected $pen;
 
+    /** @var int */
+    protected $distance = 0;
+
     public function __construct(string $name, int $x, int $y)
     {
         $this->name = $name;
@@ -25,14 +28,16 @@ class Turtle
 
     public function walk(int $steps) : void
     {
-        $x = $this->orientation()->x() + $steps * cos($this->orientation()->angle());
-        $y = $this->orientation()->y() + $steps * sin($this->orientation()->angle());
+        $x = $this->orientation()->x() + $steps * cos($this->orientation()->radians());
+        $y = $this->orientation()->y() + $steps * sin($this->orientation()->radians());
 
         $this->orientation = Orientation::create(
             $x,
             $y,
             $this->orientation()->angle()
         );
+
+        $this->distance += $steps;
     }
 
     public function turn(int $angle) : void
@@ -62,5 +67,10 @@ class Turtle
     public function penDown() : void
     {
         $this->pen = Pen::create($this->pen()->color(), true);
+    }
+
+    public function distance() : int
+    {
+        return $this->distance;
     }
 }

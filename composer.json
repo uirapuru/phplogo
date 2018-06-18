@@ -1,11 +1,13 @@
 {
     "require": {
         "phpunit/phpunit": "^7.2",
-        "imagine/imagine": "^0.7.1"
+        "imagine/imagine": "^0.7.1",
+        "symfony/expression-language": "^4.1"
     },
     "autoload": {
         "psr-4": {
-            "Logo\\" : "src\\Logo"
+            "Logo\\" : "src\\Logo",
+            "Parser\\" : "src\\Parser"
         }
     }
 }

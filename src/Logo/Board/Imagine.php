@@ -21,6 +21,6 @@ class Imagine
     public function drawLine(int $fromX, int $fromY, int $toX, int $toY)
     {
         $this->image->draw()->line(new Point($fromX, $fromY), new Point($toX, $toY), (new RGB())->color("#000000", 100));
-        $this->image->save("/tmp/test.png");
+        $this->image->save("test.png");
     }
 }

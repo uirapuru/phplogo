@@ -2,11 +2,9 @@
 
 namespace Parser;
 
-
 use Symfony\Component\ExpressionLanguage\Compiler;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLanguage;
-use Symfony\Component\ExpressionLanguage\Lexer;
 
 class ExpressionLanguage extends BaseExpressionLanguage
 {

@@ -4,11 +4,15 @@ namespace Test\ParserTest;
 
 use PHPUnit\Framework\TestCase;
 use Parser\ExpressionLanguage;
+use Symfony\Component\Yaml\Yaml;
 
 class ParserTest extends TestCase
 {
     public function testParser()
     {
+        $commands = [];
+        $cursor = 0;
+
         $userInput = <<<EOL
 naprzód 30
 prawo 90
@@ -21,6 +25,26 @@ powtórz 4 [ naprzód 40 prawo 90 ]
 
 wyczyść
 EOL;
+        $lines = explode(PHP_EOL, $userInput);
+        $config = Yaml::parse(file_get_contents(realpath(__DIR__ . "/../../src/Parser/Resources/config/commands.pl.yml")));
+        $class = null;
+
+        $result = array_filter($lines, function(string $line, string $key) use ($config, $class) : bool {
+            foreach($config as $configString) {
+                $result = sscanf($line, $configString);
+                if($result[0] !== null) {
+                    return $result[0];
+                } else {
+                    continue;
+                }
+            }
+
+            return false;
+        }, ARRAY_FILTER_USE_BOTH);
+
+
+        die(var_dump($result, $class));
+
 
         $expressionLanguage = new ExpressionLanguage();
 

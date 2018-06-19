@@ -1,0 +1,7 @@
+Logo\Command\Backward:  "wstecz %d"
+Logo\Command\Forward:   "naprzód %d"
+Logo\Command\Clear:     "czyść"
+Logo\Command\PenDown:   "opuść"
+Logo\Command\PenUp:     "podnieś"
+Logo\Command\TurnLeft:  "lewo %d"
+Logo\Command\TurnRight: "prawo %d"

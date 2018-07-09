@@ -16,7 +16,7 @@ class RepeatTest extends TestCase
     public function testRun()
     {
         $turtle = new Turtle("stefan", 0, 0);
-        $board = new Board(320, 200, "black");
+        $board = new Board(320, 200, "#000000");
 
         $mock1 = $this->prophesize(CommandInterface::class);
         $mock1->run($turtle, $board)->shouldBeCalledTimes(3);

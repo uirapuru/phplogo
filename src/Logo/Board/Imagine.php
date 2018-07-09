@@ -13,14 +13,14 @@ class Imagine
     /** @var  ImageInterface */
     protected $image;
 
-    public function __construct()
+    public function __construct(int $width = 320, int $height = 200, string $color = "#ffffff")
     {
-        $this->image = (new RealImagine())->create(new Box(320, 200), (new RGB())->color("#ffffff", 100));
+        $this->image = (new RealImagine())->create(new Box($width, $height), (new RGB())->color($color, 100));
     }
 
-    public function drawLine(int $fromX, int $fromY, int $toX, int $toY)
+    public function drawLine(int $fromX, int $fromY, int $toX, int $toY, string $color = "#000000")
     {
-        $this->image->draw()->line(new Point($fromX, $fromY), new Point($toX, $toY), (new RGB())->color("#000000", 100));
+        $this->image->draw()->line(new Point($fromX, $fromY), new Point($toX, $toY), (new RGB())->color($color, 100));
         $this->image->save("test.png");
     }
 }

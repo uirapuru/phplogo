@@ -73,4 +73,9 @@ class Turtle
     {
         return $this->distance;
     }
+
+    public function setOrientation(Orientation $orientation) : void
+    {
+        $this->orientation = $orientation;
+    }
 }

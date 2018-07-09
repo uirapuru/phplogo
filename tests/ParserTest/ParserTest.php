@@ -3,6 +3,7 @@
 namespace Test\ParserTest;
 
 use Logo\Command\Forward;
+use Logo\Command\MoveTo;
 use Logo\Command\PenDown;
 use Logo\Command\PenUp;
 use Logo\Command\Repeat;
@@ -95,5 +96,18 @@ EOL;
         $this->assertTrue($turtle->pen()->isUp());
         $this->assertEquals(125, $turtle->distance());
 
+    }
+
+    public function testPentagon()
+    {
+        $userInput = "repeat 5 [ forward 150 turnRight 144 ]";
+
+        $game = new Game();
+        $game->addCommand(new MoveTo(160,120));
+        $game->addCommands(Parser::fromString($userInput));
+        $game->run();
+
+        $turtle = $game->getTurtle();
+        $this->assertTrue($turtle->pen()->isDown());
     }
 }

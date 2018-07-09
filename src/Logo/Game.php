@@ -15,7 +15,7 @@ class Game
 
     public function __construct(int $width = 320, int $height = 240)
     {
-        $this->board = new Board($width, $height, 'white');
+        $this->board = new Board($width, $height, '#ffffff');
         $this->turtle = new Turtle('stefan', $width/2, $height/2);
     }
 

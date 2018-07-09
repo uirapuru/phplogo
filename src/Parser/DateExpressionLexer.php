@@ -24,13 +24,13 @@ class DateExpressionLexer extends SimpleLexer
         $this->token("]");
         $this->token("=");
         $this->token("\"");
+        $this->token("'");
 
         $this->regex('function_label', '@^(\w+)@');
+        $this->regex('variable', '@(:[^\W]+)@u');
 
         $this->regex('int', '@^(\d+)@');
-        $this->regex('string', '@^([^\"]+)@');
-
-        $this->regex('variable', '@(:[^\W]+)@u');
+        $this->regex('string', '@^([^\"\'\n\r\t]+)@');
 
         $this->regex('WSP', "/^[ \r\n\t]+/");
         $this->regex('CMT', '|^//.*|');

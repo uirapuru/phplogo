@@ -119,9 +119,17 @@ EOL;
     public function testString()
     {
         $userInput = <<<EOL
-"some text"
-"abcdefghijklmnoprstuqrwxyzABCDEFGHIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ"
+:e = "some text"
+:e = "abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ"
+:e = 'some text'
+:e = 'abcdefghijklmnopr stuqrwxyzABCDEFGHI JKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ'
 EOL;
+        $lexer = new DateExpressionLexer();
+        $stream = $lexer->lex($userInput);
+
+        die(var_dump($stream));
+
+
         $this->assertEquals("some text", Parser::fromString($userInput)[0]);
         $this->assertEquals("abcdefghijklmnoprstuqrwxyzABCDEFGHIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Parser::fromString($userInput)[1]);
     }

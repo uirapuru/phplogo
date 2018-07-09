@@ -21,7 +21,7 @@ class DateExpressionGrammar extends Grammar
 {
     public function __construct()
     {;
-
+/*
         $this('Program')
             ->is('Program','Command')
             ->call(function ($list, $foo) {
@@ -64,48 +64,59 @@ class DateExpressionGrammar extends Grammar
             ->call(function () {
                 return new Clear();
             })
-            ->is('"', 'string', '"')
-            ->call(function (CommonToken $string) : string {
-                return trim($string->getValue(), '"');
-            })
-//            ->is('string')
-//            ->call(function (CommonToken $string) : string {
-//                return trim($string->getValue(), '"');
-//            })
-            ->is('int')
-            ->call(function (CommonToken $int) : int {
-                return $int->getValue();
-            })
             ->is('repeat', "int", "Block")
             ->call(function (CommonToken $name, CommonToken $number, array $commands) {
                 return new Repeat((int) $number->getValue(), $commands);
             })
-            ->is('variable', "=", "int")
-            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
-                $var = new IntVariable($variable->getValue(), $integer->getValue());
-                Program::addVariable($var);
-                return $var;
-            })
-            ->is('variable', "=", "string")
+*/
+
+        $this("VariableAssignment")
+//            ->is('variable', "=", "int")
+//            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
+//                $var = new IntVariable($variable->getValue(), $integer->getValue());
+//                Program::addVariable($var);
+//                return $var;
+//            })
+            ->is('variable', "=", "String")
             ->call(function (CommonToken $variable, $_, CommonToken $string) : StringVariable {
+                die(var_dump("tuuu"));
+
                 $var = new StringVariable($variable->getValue(), trim($string->getValue(),'"'));
                 Program::addVariable($var);
                 return $var;
             })
+            ->is("String")
         ;
 
-        $this('Block')
-            ->is('[', 'Program', ']')
-            ->call(function ($o, $commands, $b) : array {
-                return $commands;
-            });
+        $this('String')
+            ->is('"', 'String', '"')
+            ->call(function ($l, string $string, $r) : string {
+                return $string;
+            })
+            ->is("'", 'String', "'")
+            ->call(function () : string {
+                die(var_dump(func_get_args()));
+            })
+            ->is('string')
+            ->call(function (CommonToken $string) : string {
+                return $string->getValue();
+            })
 
-//        $this('String')
-//            ->is('""', 'String', '""')
+        ;
+
+//        $this('Int')
+//            ->is('int')
+//            ->call(function (CommonToken $int) : int {
+//                return $int->getValue();
+//        });
+
+//        $this('Block')
+//            ->is('[', 'Program', ']')
 //            ->call(function ($o, $commands, $b) : array {
 //                return $commands;
 //            });
 
-        $this->start('Program');
+
+        $this->start('VariableAssignment');
     }
 }

@@ -4,6 +4,7 @@ namespace Parser;
 
 use Dissect\Lexer\CommonToken;
 use Dissect\Parser\Grammar;
+use function func_get_args;
 use Logo\Command\Backward;
 use Logo\Command\Clear;
 use Logo\Command\Forward;
@@ -13,6 +14,8 @@ use Logo\Command\Repeat;
 use Logo\Command\TurnLeft;
 use Logo\Command\TurnRight;
 use Logo\Program;
+use Parser\Variable\IntVariable;
+use Parser\Variable\StringVariable;
 
 class DateExpressionGrammar extends Grammar
 {
@@ -61,9 +64,33 @@ class DateExpressionGrammar extends Grammar
             ->call(function () {
                 return new Clear();
             })
+            ->is('"', 'string', '"')
+            ->call(function (CommonToken $string) : string {
+                return trim($string->getValue(), '"');
+            })
+//            ->is('string')
+//            ->call(function (CommonToken $string) : string {
+//                return trim($string->getValue(), '"');
+//            })
+            ->is('int')
+            ->call(function (CommonToken $int) : int {
+                return $int->getValue();
+            })
             ->is('repeat', "int", "Block")
             ->call(function (CommonToken $name, CommonToken $number, array $commands) {
                 return new Repeat((int) $number->getValue(), $commands);
+            })
+            ->is('variable', "=", "int")
+            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
+                $var = new IntVariable($variable->getValue(), $integer->getValue());
+                Program::addVariable($var);
+                return $var;
+            })
+            ->is('variable', "=", "string")
+            ->call(function (CommonToken $variable, $_, CommonToken $string) : StringVariable {
+                $var = new StringVariable($variable->getValue(), trim($string->getValue(),'"'));
+                Program::addVariable($var);
+                return $var;
             })
         ;
 
@@ -72,6 +99,12 @@ class DateExpressionGrammar extends Grammar
             ->call(function ($o, $commands, $b) : array {
                 return $commands;
             });
+
+//        $this('String')
+//            ->is('""', 'String', '""')
+//            ->call(function ($o, $commands, $b) : array {
+//                return $commands;
+//            });
 
         $this->start('Program');
     }

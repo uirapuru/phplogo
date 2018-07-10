@@ -19,4 +19,9 @@ class Program
     {
         self::$VARIABLES[$variable->name()] = $variable;
     }
+
+    public static function getVariable(string $name) : VariableInterface
+    {
+        return self::$VARIABLES[$name];
+    }
 }

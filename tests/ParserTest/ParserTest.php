@@ -9,6 +9,7 @@ use Logo\Command\PenUp;
 use Logo\Command\Repeat;
 use Logo\Command\TurnRight;
 use Logo\Game;
+use Logo\Program;
 use Parser\DateExpressionLexer;
 use Parser\Parser;
 use Parser\Variable\VariableInterface;
@@ -116,29 +117,26 @@ EOL;
 
     }
 
-    public function testString()
+    public function testAssignString()
     {
         $userInput = <<<EOL
 :e = "some text"
 :e = "abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ"
 :e = 'some text'
 :e = 'abcdefghijklmnopr stuqrwxyzABCDEFGHI JKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ'
+:e = 'lastValue'
 EOL;
-        $lexer = new DateExpressionLexer();
-        $stream = $lexer->lex($userInput);
+        $this->assertEquals("some text", Parser::fromString($userInput)[0]->value());
+        $this->assertEquals("abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Parser::fromString($userInput)[1]->value());
 
-        die(var_dump($stream));
-
-
-        $this->assertEquals("some text", Parser::fromString($userInput)[0]);
-        $this->assertEquals("abcdefghijklmnoprstuqrwxyzABCDEFGHIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Parser::fromString($userInput)[1]);
+        $this->assertEquals("lastValue", Program::getVariable('e')->value());
     }
 
-    public function testInt()
+    public function testAssignInt()
     {
-        $userInput = '1410';
+        $userInput = ':e = 1410';
 
-        $this->assertEquals(1410, Parser::fromString($userInput)[0]);
+        $this->assertEquals(1410, Parser::fromString($userInput)[0]->value());
     }
 
     public function testDefineVariable()
@@ -147,6 +145,19 @@ EOL;
 :xyz = 150
 :abc = "some text"
 EOL;
+        /** @var VariableInterface[] $result */
+        $result = Parser::fromString($userInput);
+
+        $this->assertEquals(150, $result[0]->value());
+        $this->assertEquals("some text", $result[1]->value());
+    }
+
+    public function testReadVariable()
+    {
+        $userInput = <<<EOL
+forward :xyz
+EOL;
+
         /** @var VariableInterface[] $result */
         $result = Parser::fromString($userInput);
 

@@ -21,21 +21,29 @@ class DateExpressionGrammar extends Grammar
 {
     public function __construct()
     {;
-/*
         $this('Program')
-            ->is('Program','Command')
+            ->is('Program','CommandParametrized')
             ->call(function ($list, $foo) {
                 $list[] = $foo;
 
                 return $list;
             })
-            ->is('Command')
+            ->is('CommandParametrized')
             ->call(function ($command) {
                 return [$command];
             })
         ;
 
-        $this('Command')
+        $this("CommandParametrized")
+            ->is('CommandName', 'variable')
+            ->call(function () {
+                die(var_dump(func_get_args()));
+            })
+            ->is('CommandName', 'int')
+            ->is('CommandName')
+        ;
+
+        $this('CommandName')
             ->is('forward', 'int')
             ->call(function (CommonToken $command, CommonToken $value) {
                 return new Forward($value->getValue());
@@ -68,20 +76,15 @@ class DateExpressionGrammar extends Grammar
             ->call(function (CommonToken $name, CommonToken $number, array $commands) {
                 return new Repeat((int) $number->getValue(), $commands);
             })
-*/
-
-        $this("VariableAssignment")
-//            ->is('variable', "=", "int")
-//            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
-//                $var = new IntVariable($variable->getValue(), $integer->getValue());
-//                Program::addVariable($var);
-//                return $var;
-//            })
+            ->is('variable', "=", "int")
+            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
+                $var = new IntVariable($variable->getValue(), $integer->getValue());
+                Program::addVariable($var);
+                return $var;
+            })
             ->is('variable', "=", "String")
-            ->call(function (CommonToken $variable, $_, CommonToken $string) : StringVariable {
-                die(var_dump("tuuu"));
-
-                $var = new StringVariable($variable->getValue(), trim($string->getValue(),'"'));
+            ->call(function (CommonToken $variable, $_, string $string) : StringVariable {
+                $var = new StringVariable(ltrim($variable->getValue(), ":"), trim($string,'"\''));
                 Program::addVariable($var);
                 return $var;
             })
@@ -104,19 +107,13 @@ class DateExpressionGrammar extends Grammar
 
         ;
 
-//        $this('Int')
-//            ->is('int')
-//            ->call(function (CommonToken $int) : int {
-//                return $int->getValue();
-//        });
-
-//        $this('Block')
-//            ->is('[', 'Program', ']')
-//            ->call(function ($o, $commands, $b) : array {
-//                return $commands;
-//            });
+        $this('Block')
+            ->is('[', 'Program', ']')
+            ->call(function ($o, $commands, $b) : array {
+                return $commands;
+            });
 
 
-        $this->start('VariableAssignment');
+        $this->start('Program');
     }
 }

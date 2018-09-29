@@ -5,6 +5,7 @@ namespace Logo;
 use Logo\Program\FunctionClass;
 use Parser\Variable;
 use Parser\Variable\VariableInterface;
+use Webmozart\Assert\Assert;
 
 class Program
 {
@@ -18,17 +19,14 @@ class Program
         self::$FUNCTIONS[] = $function;
     }
 
-    public static function addVariable(VariableInterface $variable)
+    public static function addVariable(Variable $variable)
     {
         self::$VARIABLES[$variable->name()] = $variable;
     }
 
-    public static function getVariable(string $name) : VariableInterface
+    public static function getVariable(string $name) : Variable
     {
-        if(!array_key_exists($name, self::$VARIABLES))
-        {
-            throw new \Exception("Variable " . $name . " is not set!");
-        }
+        Assert::keyExists(self::$VARIABLES, $name,"Variable " . $name . " is not set!");
 
         return self::$VARIABLES[$name];
     }

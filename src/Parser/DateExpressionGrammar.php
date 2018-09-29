@@ -13,9 +13,11 @@ use Logo\Command\PenUp;
 use Logo\Command\Repeat;
 use Logo\Command\TurnLeft;
 use Logo\Command\TurnRight;
+use Logo\CommandInterface;
 use Logo\Program;
 use Parser\Variable\IntVariable;
 use Parser\Variable\StringVariable;
+use Ramsey\Uuid\Uuid;
 
 class DateExpressionGrammar extends Grammar
 {
@@ -35,94 +37,56 @@ class DateExpressionGrammar extends Grammar
         ;
 
         $this("Instruction")
-            ->is('ProcedureCall')
+            ->is('Procedure')
             ->is('Assignment')
         ;
 
-        $this("ProcedureCall")
-            ->is('Procedure', 'variable')
-            ->call(function () {
-                die(var_dump(func_get_args()));
+        $this('Procedure')
+            ->is('command')
+            ->call(function (CommonToken $command) : CommandInterface {
+                return CommandFactory::get($command->getValue());
             })
-            ->is('Procedure', 'int')
-            ->is('Procedure', 'string')
-            ->is('Procedure')
+            ->is('command', 'ListOfArguments')
+            ->call(function (CommonToken $command, array $arguments) : CommandInterface {
+                return CommandFactory::get($command->getValue(), $arguments);
+            })
+            ->is('command', 'ListOfArguments',  'Block')
+            ->call(function (CommonToken $command, array $arguments, array $commands) : CommandInterface {
+                return CommandFactory::get($command->getValue(), [$arguments[0], $commands]);
+            })
         ;
 
-        $this('Procedure')
-            ->is('forward', 'Argument')
-            ->call(function (CommonToken $command, CommonToken $value) {
-                if($value->getType() === "variable") {
-                    $var = $this->getVariable($value->getValue());
-                } else {
-                    $var = $value->getValue();
-                }
-
-                return new Forward($var);
+        $this("ListOfArguments")
+            ->is('ListOfArguments', 'Argument')
+            ->call(function (array $list, $argument) {
+                $list[] = $argument;
+                return $list;
             })
-            ->is('backward', 'Argument')
-            ->call(function (CommonToken $command, CommonToken $value) {
-                return new Backward($value->getValue());
-            })
-            ->is('turnLeft', 'Argument')
-            ->call(function (CommonToken $command, CommonToken $value) {
-                return new TurnLeft($value->getValue());
-            })
-            ->is('turnRight', 'Argument')
-            ->call(function (CommonToken $command, CommonToken $value) {
-                return new TurnRight($value->getValue());
-            })
-            ->is('penDown')
-            ->call(function () {
-                return new PenDown();
-            })
-            ->is('penUp')
-            ->call(function () {
-                return new PenUp();
-            })
-            ->is('clear')
-            ->call(function () {
-                return new Clear();
-            })
-            ->is('repeat', "Argument", "Block")
-            ->call(function (CommonToken $name, CommonToken $number, array $commands) {
-                return new Repeat((int) $number->getValue(), $commands);
+            ->is('Argument')
+            ->call(function (Variable $argument) {
+                return [$argument->val()];
             })
         ;
 
         $this('Argument')
             ->is("int")
+            ->call(function (CommonToken $token) : Variable {
+                return Variable::int(null, ltrim($token->getValue()));
+            })
             ->is("string")
+            ->call(function (CommonToken $token) : Variable {
+                return Variable::string(null, trim($token->getValue(), "\"\'"));
+            })
             ->is("variable")
+            ->call(function (CommonToken $token) : Variable {
+                return $this->getVariable(ltrim($token->getValue(), ":"));
+            })
         ;
 
         $this('Assignment')
-            ->is('variable', "=", "int")
-            ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
-                $var = new IntVariable($variable->getValue(), $integer->getValue());
-                Program::addVariable($var);
-                return $var;
-            })
-            ->is('variable', "=", "string")
-            ->call(function (CommonToken $variable, $_, CommonToken $string) : StringVariable {
-                $var = new StringVariable(ltrim($variable->getValue(), ":"), trim($string->getValue(),'"\''));
-                Program::addVariable($var);
-                return $var;
-            })
-        ;
-
-        $this('String')
-            ->is('"', 'String', '"')
-            ->call(function ($l, string $string, $r) : string {
-                return $string;
-            })
-            ->is("'", 'String', "'")
-            ->call(function () : string {
-                die(var_dump(func_get_args()));
-            })
-            ->is('string')
-            ->call(function (CommonToken $string) : string {
-                return $string->getValue();
+            ->is('variable', "=", "Argument")
+            ->call(function (CommonToken $variable, $_, Variable $argument) {
+                Program::addVariable($argument->copyAs($variable->getValue()));
             })
         ;
 

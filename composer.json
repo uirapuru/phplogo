@@ -4,7 +4,8 @@
         "imagine/imagine": "^0.7.1",
         "symfony/expression-language": "^4.1",
         "symfony/yaml": "^4.1",
-        "jakubledl/dissect": "^1.0"
+        "jakubledl/dissect": "^1.0",
+        "ramsey/uuid": "^3.8"
     },
     "autoload": {
         "psr-4": {

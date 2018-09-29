@@ -12,6 +12,7 @@ use Logo\Game;
 use Logo\Program;
 use Parser\DateExpressionLexer;
 use Parser\Parser;
+use Parser\Variable;
 use Parser\Variable\VariableInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -120,25 +121,29 @@ EOL;
     public function testAssignString()
     {
         $userInput = <<<EOL
-:e = "some text"
-:e = "abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ"
-:e = 'some text'
-:e = 'abcdefghijklmnopr stuqrwxyzABCDEFGHI JKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ'
-:e = 'lastValue'
+:e1 = "some text"
+:e2 = "abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ"
+:e3 = 'some text'
+:e4 = 'abcdefghijklmnopr stuqrwxyzABCDEFGHI JKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ'
+:e5 = 'lastValue'
 :jakasInnaZmienna = 'hello world();'
 EOL;
-        $this->assertEquals("some text", Parser::fromString($userInput)[0]->value());
-        $this->assertEquals("abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Parser::fromString($userInput)[1]->value());
+        Parser::fromString($userInput);
 
-        $this->assertEquals("lastValue", Program::getVariable('e')->value());
-        $this->assertEquals("hello world();", Program::getVariable('jakasInnaZmienna')->value());
+        $this->assertEquals("some text", Program::getVariable("e1")->val());
+        $this->assertEquals("abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Program::getVariable("e2")->val());
+
+        $this->assertEquals("lastValue", Program::getVariable('e5')->val());
+        $this->assertEquals("hello world();", Program::getVariable('jakasInnaZmienna')->val());
     }
 
     public function testAssignInt()
     {
         $userInput = ':e = 1410';
 
-        $this->assertEquals(1410, Parser::fromString($userInput)[0]->value());
+        Parser::fromString($userInput);
+
+        $this->assertEquals(1410, Program::getVariable("e")->val());
     }
 
     public function testDefineVariable()
@@ -150,21 +155,21 @@ EOL;
         /** @var VariableInterface[] $result */
         $result = Parser::fromString($userInput);
 
-        $this->assertEquals(150, $result[0]->value());
-        $this->assertEquals("some text", $result[1]->value());
+        $this->assertEquals(150, Program::getVariable("xyz")->val());
+        $this->assertEquals("some text", Program::getVariable("abc")->val());
     }
 
     public function testReadVariable()
     {
+        Program::addVariable(Variable::int("xyz", 150));
+
         $userInput = <<<EOL
 forward :xyz
 EOL;
-
         /** @var VariableInterface[] $result */
         $result = Parser::fromString($userInput);
-
-        $this->assertEquals(150, $result[0]->value());
-        $this->assertEquals("some text", $result[1]->value());
+        $forward = array_pop($result);
+        $this->assertEquals($forward, new Forward(150));
     }
 
     public function testDefineFunction()

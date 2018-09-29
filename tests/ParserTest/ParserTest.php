@@ -125,11 +125,13 @@ EOL;
 :e = 'some text'
 :e = 'abcdefghijklmnopr stuqrwxyzABCDEFGHI JKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ'
 :e = 'lastValue'
+:jakasInnaZmienna = 'hello world();'
 EOL;
         $this->assertEquals("some text", Parser::fromString($userInput)[0]->value());
         $this->assertEquals("abcdefghijklmno prstuqrwxyzABCDEFG HIJKLMNOPRQSTUWXYZ123456677890-=\!@#$%^&*()_+|ĄĘŹĆŁÓŻŹżźŹ", Parser::fromString($userInput)[1]->value());
 
         $this->assertEquals("lastValue", Program::getVariable('e')->value());
+        $this->assertEquals("hello world();", Program::getVariable('jakasInnaZmienna')->value());
     }
 
     public function testAssignInt()

@@ -22,41 +22,53 @@ class DateExpressionGrammar extends Grammar
     public function __construct()
     {;
         $this('Program')
-            ->is('Program','CommandParametrized')
+            ->is('Program','Instruction')
             ->call(function ($list, $foo) {
                 $list[] = $foo;
 
                 return $list;
             })
-            ->is('CommandParametrized')
-            ->call(function ($command) {
-                return [$command];
+            ->is('Instruction')
+            ->call(function ($foo) {
+                return [$foo];
             })
         ;
 
-        $this("CommandParametrized")
-            ->is('CommandName', 'variable')
+        $this("Instruction")
+            ->is('ProcedureCall')
+            ->is('Assignment')
+        ;
+
+        $this("ProcedureCall")
+            ->is('Procedure', 'variable')
             ->call(function () {
                 die(var_dump(func_get_args()));
             })
-            ->is('CommandName', 'int')
-            ->is('CommandName')
+            ->is('Procedure', 'int')
+            ->is('Procedure', 'string')
+            ->is('Procedure')
         ;
 
-        $this('CommandName')
-            ->is('forward', 'int')
+        $this('Procedure')
+            ->is('forward', 'Argument')
             ->call(function (CommonToken $command, CommonToken $value) {
-                return new Forward($value->getValue());
+                if($value->getType() === "variable") {
+                    $var = $this->getVariable($value->getValue());
+                } else {
+                    $var = $value->getValue();
+                }
+
+                return new Forward($var);
             })
-            ->is('backward', 'int')
+            ->is('backward', 'Argument')
             ->call(function (CommonToken $command, CommonToken $value) {
                 return new Backward($value->getValue());
             })
-            ->is('turnLeft', 'int')
+            ->is('turnLeft', 'Argument')
             ->call(function (CommonToken $command, CommonToken $value) {
                 return new TurnLeft($value->getValue());
             })
-            ->is('turnRight', 'int')
+            ->is('turnRight', 'Argument')
             ->call(function (CommonToken $command, CommonToken $value) {
                 return new TurnRight($value->getValue());
             })
@@ -72,23 +84,31 @@ class DateExpressionGrammar extends Grammar
             ->call(function () {
                 return new Clear();
             })
-            ->is('repeat', "int", "Block")
+            ->is('repeat', "Argument", "Block")
             ->call(function (CommonToken $name, CommonToken $number, array $commands) {
                 return new Repeat((int) $number->getValue(), $commands);
             })
+        ;
+
+        $this('Argument')
+            ->is("int")
+            ->is("string")
+            ->is("variable")
+        ;
+
+        $this('Assignment')
             ->is('variable', "=", "int")
             ->call(function (CommonToken $variable, $_, CommonToken $integer) : IntVariable {
                 $var = new IntVariable($variable->getValue(), $integer->getValue());
                 Program::addVariable($var);
                 return $var;
             })
-            ->is('variable', "=", "String")
-            ->call(function (CommonToken $variable, $_, string $string) : StringVariable {
-                $var = new StringVariable(ltrim($variable->getValue(), ":"), trim($string,'"\''));
+            ->is('variable', "=", "string")
+            ->call(function (CommonToken $variable, $_, CommonToken $string) : StringVariable {
+                $var = new StringVariable(ltrim($variable->getValue(), ":"), trim($string->getValue(),'"\''));
                 Program::addVariable($var);
                 return $var;
             })
-            ->is("String")
         ;
 
         $this('String')
@@ -104,16 +124,20 @@ class DateExpressionGrammar extends Grammar
             ->call(function (CommonToken $string) : string {
                 return $string->getValue();
             })
-
         ;
 
         $this('Block')
             ->is('[', 'Program', ']')
             ->call(function ($o, $commands, $b) : array {
                 return $commands;
-            });
-
+            })
+        ;
 
         $this->start('Program');
+    }
+
+    private function getVariable(string $variableName)
+    {
+        return Program::getVariable($variableName);
     }
 }

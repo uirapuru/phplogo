@@ -174,17 +174,13 @@ EOL;
 
     public function testDefineFunction()
     {
+        $this->markTestIncomplete("function definition not yet supported");
+
         $userInput = <<<EOL
 to square :a
-    repeat 4 [ forward :a right 90 ]   
+    repeat 4 [ forward :a turnRight 90 ]   
 end
 EOL;
-        $lexer = new DateExpressionLexer();
-        $stream = $lexer->lex($userInput);
-
-        die(var_dump($stream));
-
-        /** @var VariableInterface[] $result */
         $result = Parser::fromString($userInput);
 
         die(var_dump($result));

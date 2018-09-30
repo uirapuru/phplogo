@@ -8,19 +8,12 @@ class DateExpressionLexer extends SimpleLexer
 {
     public function __construct()
     {
-//        $this->token("forward");
-//        $this->token("backward");
-//        $this->token("turnLeft");
-//        $this->token("turnRight");
-//        $this->token("penDown");
-//        $this->token("penUp");
-//        $this->token("repeat");
-//        $this->token("clear");
-
         $this->regex('command', "@(forward|backward|turnLeft|turnRight|penDown|penUp|repeat|clear)@");
 
-        $this->token("to");
-        $this->token("end");
+//        $this->token("to");
+//        $this->regex('etiquette', '@([a-z\_]+)@u');
+//        $this->regex('argument', '@(_[^\W]+)@u');
+//        $this->token("end");
 
         $this->token("[");
         $this->token("]");

@@ -39,6 +39,7 @@ class DateExpressionGrammar extends Grammar
         $this("Instruction")
             ->is('Procedure')
             ->is('Assignment')
+            ->is('FunctionDefinition')
         ;
 
         $this('Procedure')
@@ -89,6 +90,40 @@ class DateExpressionGrammar extends Grammar
                 Program::addVariable($argument->copyAs($variable->getValue()));
             })
         ;
+
+        // defining function
+
+//        $this('FunctionDefinition')
+//            ->is('to', "etiquette", "Program", "end")
+//            ->call(function () {
+//                die(var_dump(func_get_args()));
+//            })
+//            ->is('to', "etiquette", "FunctionArgumentList", "Program", "end")
+//            ->call(function () {
+//                die(var_dump(func_get_args()));
+//            })
+//        ;
+//
+//        $this("FunctionArgumentList")
+//            ->is('FunctionArgumentList', 'FunctionArgument')
+//            ->call(function (array $list, $argument) {
+//                $list[] = $argument;
+//                return $list;
+//            })
+//            ->is('FunctionArgument')
+//            ->call(function ($argument) {
+//                return [$argument];
+//            })
+//        ;
+//
+//        $this("FunctionArgument")
+//            ->is("argument")
+//            ->call(function (CommonToken $token) : string {
+//                return ltrim($token->getValue(), ":");
+//            })
+//        ;
+
+        // blocks
 
         $this('Block')
             ->is('[', 'Program', ']')

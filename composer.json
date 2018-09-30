@@ -2,16 +2,15 @@
     "require": {
         "phpunit/phpunit": "^7.2",
         "imagine/imagine": "^0.7.1",
-        "symfony/expression-language": "^4.1",
-        "symfony/yaml": "^4.1",
         "jakubledl/dissect": "^1.0",
         "ramsey/uuid": "^3.8",
-        "symfony/console": "^4.1"
+        "symfony/symfony": "^4.2"
     },
     "autoload": {
         "psr-4": {
-            "Logo\\" : "src\\Logo",
-            "Parser\\" : "src\\Parser"
+            "Logo\\": "src\\Logo",
+            "Parser\\": "src\\Parser"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

@@ -4,10 +4,15 @@
         "imagine/imagine": "^0.7.1",
         "jakubledl/dissect": "^1.0",
         "ramsey/uuid": "^3.8",
-        "symfony/symfony": "^4.2"
+        "symfony/symfony": "^4.2",
+        "monolog/monolog": "^2.0@dev",
+        "sensio/framework-extra-bundle": "^5.2@dev",
+        "twig/twig": "2.x-dev",
+        "twig/extensions": "^1.5@dev"
     },
     "autoload": {
         "psr-4": {
+            "App\\": "src\\App",
             "Logo\\": "src\\Logo",
             "Parser\\": "src\\Parser"
         }

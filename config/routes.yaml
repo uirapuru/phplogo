@@ -1,0 +1,21 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+addCommand:
+    path: /add-command
+    controller: App\Controller\DefaultController::addCommand
+    methods:
+    - POST
+
+getLogo:
+    path: /logo.jpg
+    controller: App\Controller\DefaultController::getLogo
+    methods:
+    - GET
+
+reset:
+    path: /reset
+    controller: App\Controller\DefaultController::reset
+    methods:
+    - GET

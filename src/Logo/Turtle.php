@@ -2,6 +2,8 @@
 
 namespace Logo;
 
+use Imagine\Image\ImageInterface;
+use Imagine\Imagick\Imagine;
 use Logo\Turtle\Orientation;
 use Logo\Turtle\Pen;
 
@@ -19,11 +21,15 @@ class Turtle
     /** @var int */
     protected $distance = 0;
 
+    /** @var ImageInterface  */
+    protected $image;
+
     public function __construct(string $name, int $x, int $y)
     {
         $this->name = $name;
         $this->pen = new Pen("black", true);
         $this->orientation = new Orientation($x, $y, 0);
+        $this->image = (new Imagine())->open(__DIR__ . "/turtle.png");
     }
 
     public function walk(int $steps) : void
@@ -47,6 +53,8 @@ class Turtle
             $this->orientation->y(),
             $this->orientation->angle() + $angle
         );
+
+        $this->image->rotate($this->orientation->radians());
     }
 
     public function orientation() : Orientation
@@ -77,5 +85,10 @@ class Turtle
     public function setOrientation(Orientation $orientation) : void
     {
         $this->orientation = $orientation;
+    }
+
+    public function image() : ImageInterface
+    {
+        return $this->image;
     }
 }

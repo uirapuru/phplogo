@@ -2,6 +2,7 @@
 
 namespace Logo;
 
+use Imagine\Image\ImageInterface;
 use Logo\Board\Imagine;
 
 class Board
@@ -34,5 +35,10 @@ class Board
     public function clear() : void
     {
 
+    }
+
+    public function image() : ImageInterface
+    {
+        return $this->adapter->image();
     }
 }

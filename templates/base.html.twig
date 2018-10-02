@@ -1,0 +1,19 @@
+<html>
+<head><title>Logo!</title></head>
+<body>
+    <img src="{{ url("getLogo") }}" width="640" height="480" style="border:1px solid black"/>
+
+    <form action="{{ url("addCommand") }}" method="post">
+        <textarea name="command" cols="100" rows="8">
+turnLeft 90
+
+repeat 5 [
+    forward 200
+    turnRight 146
+]
+        </textarea>
+        <button type="submit">Rysuj</button>
+        <a href="{{ url('reset') }}">reset</a>
+    </form>
+</body>
+</html>

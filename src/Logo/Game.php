@@ -2,6 +2,10 @@
 
 namespace Logo;
 
+use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
+
 class Game
 {
     /** @var Board */
@@ -31,7 +35,7 @@ class Game
         }
     }
 
-    public function getBoard(): Board
+    public function board(): Board
     {
         return $this->board;
     }
@@ -46,5 +50,18 @@ class Game
         foreach ($commands as $command) {
             $this->commands[] = $command;
         }
+    }
+
+    public function image() : ImageInterface
+    {
+        $width = 64;
+        $height = 40;
+
+        $orientation = $this->turtle->orientation();
+
+        return $this->board->image()->paste(
+            $this->turtle->image()->resize(new Box($width, $height)),
+            new Point($orientation->x() - $width/2, $orientation->y() - $height/2)
+        );
     }
 }

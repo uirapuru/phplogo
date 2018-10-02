@@ -1,0 +1,16 @@
+parameters:
+    locale: 'en'
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+
+    App\:
+        resource: '../src/App/*'
+        exclude: '../src/App/{Repository,EventDispatcher,DependencyInjection,Entity,Migrations,Tests,Twig,Kernel.php}'
+
+    App\Controller\:
+        resource: '../src/App/Controller'
+        tags: ['controller.service_arguments']

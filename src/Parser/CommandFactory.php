@@ -16,7 +16,7 @@ use Webmozart\Assert\Assert;
 
 class CommandFactory
 {
-    private static $commands = [
+    public static $commands = [
         'backward'  => Backward::class,
         'clear'     => Clear::class,
         'forward'   => Forward::class,

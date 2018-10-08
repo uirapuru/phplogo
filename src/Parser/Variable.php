@@ -16,7 +16,10 @@ class Variable
     /** @var string */
     protected $stringValue;
 
-    protected function __construct(string $name, int $intValue = null, string $stringValue = null)
+    /** @var float */
+    protected $floatValue;
+
+    protected function __construct(string $name, int $intValue = null, string $stringValue = null, float $floatValue = null)
     {
         $name = ltrim($name, ":");
         Assert::regex($name, "@^([a-zA-Z0-9\-]+)$@");
@@ -24,6 +27,7 @@ class Variable
         $this->name = $name;
         $this->intValue = $intValue;
         $this->stringValue = $stringValue;
+        $this->floatValue = $floatValue;
     }
 
     public static function string(?string $name, string $value) : self
@@ -36,6 +40,11 @@ class Variable
         return new self($name ?? Uuid::uuid4(), $value);
     }
 
+    public static function float(?string $name, string $value) : self
+    {
+        return new self($name ?? Uuid::uuid4(), null, null, floatval($value));
+    }
+
     public function name() : string
     {
         return ltrim($this->name, ":");
@@ -43,7 +52,7 @@ class Variable
 
     public function val()
     {
-        return $this->intValue ?? $this->stringValue;
+        return $this->intValue ?? $this->stringValue ?? $this->floatValue;
     }
 
     public function copyAs(?string $newName) : self

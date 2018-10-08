@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2e698f90f1ea808bed4bf88f451fc62",
+    "content-hash": "9a4adc5521cb039ecf7f5b2c09a6df8d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2979,12 +2979,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "d1fd4325ea2244a1b68a5be7fa05d0723f2260fd"
+                "reference": "cbe289517470eeea27162fd2d523eb29c95f775f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/d1fd4325ea2244a1b68a5be7fa05d0723f2260fd",
-                "reference": "d1fd4325ea2244a1b68a5be7fa05d0723f2260fd",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/cbe289517470eeea27162fd2d523eb29c95f775f",
+                "reference": "cbe289517470eeea27162fd2d523eb29c95f775f",
                 "shasum": ""
             },
             "require": {
@@ -3132,7 +3132,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-09-30T04:37:12+00:00"
+            "time": "2018-10-06T17:31:54+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -3354,7 +3354,8 @@
         "monolog/monolog": 20,
         "sensio/framework-extra-bundle": 20,
         "twig/twig": 20,
-        "twig/extensions": 20
+        "twig/extensions": 20,
+        "symfony/validator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

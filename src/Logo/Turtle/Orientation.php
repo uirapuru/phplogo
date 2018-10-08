@@ -10,14 +10,14 @@ class Orientation
     /** @var  integer */
     protected $y;
 
-    /** @var  integer */
+    /** @var  string */
     protected $angle;
 
-    public function __construct(int $x, int $y, int $angle)
+    public function __construct(int $x, int $y, string $angle)
     {
         $this->x = $x;
         $this->y = $y;
-        $this->angle = $angle % 360;
+        $this->angle = bcmod($angle, 360);
     }
 
     public function x(): int
@@ -30,12 +30,12 @@ class Orientation
         return $this->y;
     }
 
-    public function angle(): int
+    public function angle(): string
     {
         return $this->angle;
     }
 
-    public static function create(int $x, int $y, int $angle) : self
+    public static function create(int $x, int $y, string $angle) : self
     {
         return new self($x, $y, $angle);
     }

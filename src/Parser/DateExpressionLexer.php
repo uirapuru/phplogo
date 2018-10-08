@@ -8,7 +8,9 @@ class DateExpressionLexer extends SimpleLexer
 {
     public function __construct()
     {
-        $this->regex('command', "@(forward|backward|turnLeft|turnRight|penDown|penUp|repeat|clear)@");
+        $commands = implode("|", array_keys(CommandFactory::$commands));
+
+        $this->regex('command', "@(" . $commands . ")@");
 
 //        $this->token("to");
 //        $this->regex('etiquette', '@([a-z\_]+)@u');
@@ -22,6 +24,7 @@ class DateExpressionLexer extends SimpleLexer
         $this->regex('variable', '@(:[^\W]+)@u');
 
         $this->regex('int', '@^(\d+)@');
+        $this->regex('float', '@^(\d+)\.(\d+)@');
         $this->regex('string', '@^([\'"][^\"\'\n\r\t]+[\'""])@');
 
         $this->regex('WSP', "/^[ \r\n\t]+/");

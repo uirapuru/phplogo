@@ -118,6 +118,26 @@ EOL;
 
     }
 
+    public function testFloat()
+    {
+        $userInput = <<<EOL
+turnRight 36.6
+forward 200 
+EOL;
+
+        $game = new Game();
+        $game->addCommands(Parser::fromString($userInput));
+        $game->run();
+
+        $turtle = $game->getTurtle();
+
+        $this->assertEquals(125, $turtle->orientation()->x(), "Turtle is at: " . $turtle->orientation());
+        $this->assertEquals(170, $turtle->orientation()->y(), "Turtle is at: " . $turtle->orientation());
+        $this->assertEquals(200, $turtle->orientation()->angle(), "Turtle is at: " . $turtle->orientation());
+        $this->assertTrue($turtle->pen()->isUp());
+        $this->assertEquals(125, $turtle->distance());
+    }
+
     public function testAssignString()
     {
         $userInput = <<<EOL

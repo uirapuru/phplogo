@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Listing;
+use App\Form\ListingType;
 use Logo\Game;
 use Parser\Parser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,24 +13,37 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
-    public function index()
+    public function index(Session $session, Request $request)
     {
-        return $this->render("index.html.twig");
-    }
+        $data = new Listing($session->get("listing", ""));
 
-    public function addCommand(Request $request, Session $session)
-    {
-//        $commands = $session->get("commands", []);
-        $commands[] = $request->get("command", "");
-        $session->set("commands", $commands);
-        $session->save();
+        $form = $this->createForm(ListingType::class, $data, [
+            "action" => $this->generateUrl("index"),
+            "method" => Request::METHOD_POST
+        ]);
 
-        return $this->redirectToRoute("index");
+        if($request->isMethod(Request::METHOD_POST)) {
+            $form->handleRequest($request);
+
+            if($form->isValid()) {
+                $listing = $form["listing"]->getData();
+
+                $session->set("listing", $listing);
+                $session->set("commands", Parser::fromString($listing));
+                $session->save();
+
+                return $this->redirectToRoute("index");
+            }
+        }
+
+        return $this->render("index.html.twig", [
+            "form" => $form->createView()
+        ]);
     }
 
     public function reset(Session $session)
     {
-        $session->set("commands", []);
+        $session->set("listing", "");
         $session->save();
 
         return $this->redirectToRoute("index");
@@ -36,14 +51,17 @@ class DefaultController extends Controller
 
     public function getLogo(Session $session)
     {
-        $commands = $session->get("commands", []);
+        $listing = $session->get("listing", "");
 
         $game = new Game(800, 600);
 
-        if(count($commands) > 0) {
-            $game->addCommands(
-                Parser::fromString(implode(" ", $commands))
-            );
+        if(strlen($listing) > 0) {
+            if(!$session->has("commands")) {
+                $session->set("commands", Parser::fromString($listing));
+                $session->save();
+            }
+
+            $game->addCommands($session->get("commands"));
         }
 
         $game->run();

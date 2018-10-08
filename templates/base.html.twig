@@ -1,19 +1,56 @@
-<html>
-<head><title>Logo!</title></head>
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+
 <body>
-    <img src="{{ url("getLogo") }}" width="640" height="480" style="border:1px solid black"/>
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
 
-    <form action="{{ url("addCommand") }}" method="post">
-        <textarea name="command" cols="100" rows="8">
-turnLeft 90
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3">
+            <h2>Pomoc</h2>
 
-repeat 5 [
-    forward 200
-    turnRight 146
-]
-        </textarea>
-        <button type="submit">Rysuj</button>
-        <a href="{{ url('reset') }}">reset</a>
-    </form>
+            <ul>
+                <li><strong>turnRight 90</strong> - żółw obraca się w prawo o 90 stopni</li>
+                <li><strong>turnLeft 30</strong> - żółw obraca się w lewo o 30 stopni</li>
+                <li><strong>forward 100</strong> - żółw idzie przed siebie 100 kroków</li>
+                <li><strong>backward 45</strong> - żółw cofa się o 45 kroków</li>
+                <li><strong>repeat 4 [ ... ]</strong> - żółw 4 razy powtarza instrukcje w nawiasach</li>
+                <li><strong>penUp</strong> - pióro, którym maluje żółw zostaje podniesione</li>
+                <li><strong>penDown</strong> - pióro, zostaje opuszczone</li>
+                <li><strong>:x = 5</strong> - zapamiętuje, że x równa się 5</li>
+
+            </ul>
+        </div>
+        <div class="span9">{% block body %}{% endblock body %}</div>
+    </div>
+</div>
+
+<script src="js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
+
 </html>
+
+

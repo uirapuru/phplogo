@@ -17,6 +17,9 @@ class Game
     /** @var array|CommandInterface[] */
     protected $commands = [];
 
+    /** @var bool */
+    private $pasteTurtle = false;
+
     public function __construct(int $width = 320, int $height = 240)
     {
         $this->board = new Board($width, $height, '#ffffff');
@@ -59,9 +62,13 @@ class Game
 
         $orientation = $this->turtle->orientation();
 
-        return $this->board->image()->paste(
-            $this->turtle->image()->resize(new Box($width, $height)),
-            new Point($orientation->x() - $width/2, $orientation->y() - $height/2)
-        );
+        if($this->pasteTurtle) {
+            return $this->board->image()->paste(
+                $this->turtle->image()->resize(new Box($width, $height)),
+                new Point($orientation->x() - $width/2, $orientation->y() - $height/2)
+            );
+        } else {
+            return $this->board->image();
+        }
     }
 }

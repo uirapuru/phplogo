@@ -1,1 +1,20 @@
 {% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Witaj w LOGO!</h1>
+    <div class="hero-unit">
+        <img src="{{ url("getLogo") }}" width="800" height="600" style="border:1px solid black"/>
+    </div>
+
+    {{ form_start(form) }}
+    <div class="row-fluid">
+        {{ form_row(form.listing, {attr: { class: "span12" }}) }}
+    </div>
+
+    <button type="submit">Rysuj</button>
+    <a href="{{ url('reset') }}">reset</a>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock body %}
+

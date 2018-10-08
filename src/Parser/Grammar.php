@@ -3,23 +3,11 @@
 namespace Parser;
 
 use Dissect\Lexer\CommonToken;
-use Dissect\Parser\Grammar;
-use function func_get_args;
-use Logo\Command\Backward;
-use Logo\Command\Clear;
-use Logo\Command\Forward;
-use Logo\Command\PenDown;
-use Logo\Command\PenUp;
-use Logo\Command\Repeat;
-use Logo\Command\TurnLeft;
-use Logo\Command\TurnRight;
+use Dissect\Parser\Grammar as BaseGrammar;
 use Logo\CommandInterface;
 use Logo\Program;
-use Parser\Variable\IntVariable;
-use Parser\Variable\StringVariable;
-use Ramsey\Uuid\Uuid;
 
-class DateExpressionGrammar extends Grammar
+class Grammar extends BaseGrammar
 {
     public function __construct()
     {;
@@ -69,11 +57,19 @@ class DateExpressionGrammar extends Grammar
             })
         ;
 
-        $this('Argument')
+        $this('Numeric')
             ->is("int")
             ->call(function (CommonToken $token) : Variable {
-                return Variable::int(null, ltrim($token->getValue()));
+                return Variable::int(null, intval($token->getValue()));
             })
+            ->is("float")
+            ->call(function (CommonToken $token) : Variable {
+                return Variable::float(null, floatval($token->getValue()));
+            })
+        ;
+
+        $this('Argument')
+            ->is("Numeric")
             ->is("string")
             ->call(function (CommonToken $token) : Variable {
                 return Variable::string(null, trim($token->getValue(), "\"\'"));

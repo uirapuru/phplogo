@@ -18,7 +18,7 @@ class Game
     protected $commands = [];
 
     /** @var bool */
-    private $pasteTurtle = false;
+    private $pasteTurtle = true;
 
     public function __construct(int $width = 320, int $height = 240)
     {

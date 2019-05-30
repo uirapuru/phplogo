@@ -34,10 +34,18 @@
                 <li><strong>backward 45</strong> - żółw cofa się o 45 kroków</li>
                 <li><strong>repeat 4 [ ... ]</strong> - żółw 4 razy powtarza instrukcje w nawiasach</li>
                 <li><strong>penUp</strong> - pióro, którym maluje żółw zostaje podniesione</li>
-                <li><strong>penDown</strong> - pióro, zostaje opuszczone</li>
+                <li><strong>penDown</strong> - pióro zostaje opuszczone</li>
                 <li><strong>:x = 5</strong> - zapamiętuje, że x równa się 5</li>
 
             </ul>
+
+            <h2>Debug</h2>
+
+            <div>
+            {{ dump(app.session.get("orientation")) }}
+            {{ dump(app.session.get("log")) }}
+
+            </div>
         </div>
         <div class="span9">{% block body %}{% endblock body %}</div>
     </div>

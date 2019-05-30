@@ -24,6 +24,9 @@ class Turtle
     /** @var ImageInterface  */
     protected $image;
 
+    /** @var bool */
+    protected $lookingRight;
+
     public function __construct(string $name, int $x, int $y)
     {
         $this->name = $name;
@@ -37,6 +40,14 @@ class Turtle
         $x = $this->orientation()->x() + $steps * cos($this->orientation()->radians());
         $y = $this->orientation()->y() + $steps * sin($this->orientation()->radians());
 
+        if($x > $this->orientation->x()) {
+            $this->image->flipHorizontally();
+            $this->lookingRight = true;
+        } else if($x <= $this->orientation->x() && $this->lookingRight) {
+            $this->image->flipHorizontally();
+            $this->lookingRight = false;
+        }
+
         $this->orientation = Orientation::create(
             $x,
             $y,
@@ -44,6 +55,7 @@ class Turtle
         );
 
         $this->distance += $steps;
+
     }
 
     public function turn(int $angle) : void

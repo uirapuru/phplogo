@@ -64,6 +64,8 @@ class DefaultController extends Controller
             $game->addCommands($session->get("commands"));
         }
 
+        $session->set("orientation", $game->getTurtle()->orientation());
+
         $game->run();
 
         $image = $game->image();

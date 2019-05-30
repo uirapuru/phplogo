@@ -1266,7 +1266,7 @@
         , title = this.getTitle()
 
       $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-      $tip.removeClass('fade in top bottom left right')
+      $tip.removeClass('fade in top bottom left lookingRight')
     }
 
   , hide: function () {
@@ -1456,7 +1456,7 @@
       $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
       $tip.find('.popover-content')[this.options.html ? 'html' : 'text'](content)
 
-      $tip.removeClass('fade top bottom left right in')
+      $tip.removeClass('fade top bottom left lookingRight in')
     }
 
   , hasContent: function () {
